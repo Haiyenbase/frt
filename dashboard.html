@@ -1,0 +1,1360 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FRT Dashboard - GSXD-20250901-24</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  @font-face { font-family:'Be Vietnam Pro'; font-weight:400; font-style:normal; font-display:swap;
+    src: url('fonts/bvp_400_vi.woff2') format('woff2');
+    unicode-range: U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB; }
+  @font-face { font-family:'Be Vietnam Pro'; font-weight:400; font-style:normal; font-display:swap;
+    src: url('fonts/bvp_400_la.woff2') format('woff2');
+    unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+  @font-face { font-family:'Be Vietnam Pro'; font-weight:600; font-style:normal; font-display:swap;
+    src: url('fonts/bvp_600_vi.woff2') format('woff2');
+    unicode-range: U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB; }
+  @font-face { font-family:'Be Vietnam Pro'; font-weight:600; font-style:normal; font-display:swap;
+    src: url('fonts/bvp_600_la.woff2') format('woff2');
+    unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+  @font-face { font-family:'Be Vietnam Pro'; font-weight:700; font-style:normal; font-display:swap;
+    src: url('fonts/bvp_700_vi.woff2') format('woff2');
+    unicode-range: U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB; }
+  @font-face { font-family:'Be Vietnam Pro'; font-weight:700; font-style:normal; font-display:swap;
+    src: url('fonts/bvp_700_la.woff2') format('woff2');
+    unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+  @font-face { font-family:'Be Vietnam Pro'; font-weight:800; font-style:normal; font-display:swap;
+    src: url('fonts/bvp_800_vi.woff2') format('woff2');
+    unicode-range: U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB; }
+  @font-face { font-family:'Be Vietnam Pro'; font-weight:800; font-style:normal; font-display:swap;
+    src: url('fonts/bvp_800_la.woff2') format('woff2');
+    unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+  :root {
+    --blue: #1e40af; --blue-light: #3b82f6; --blue-pale: #dbeafe;
+    --green: #166534; --green-light: #22c55e; --green-pale: #dcfce7;
+    --red: #991b1b; --red-light: #ef4444; --red-pale: #fee2e2;
+    --orange: #c2410c; --orange-light: #f97316; --orange-pale: #ffedd5;
+    --gray: #374151; --gray2: #6b7280; --gray3: #e5e7eb; --gray4: #f9fafb;
+    --white: #ffffff; --shadow: 0 2px 8px rgba(0,0,0,0.10);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Be Vietnam Pro', 'Segoe UI', system-ui, sans-serif; background: #f1f5f9; color: var(--gray); font-size: 13px; }
+
+  /* HEADER */
+  .header { background: linear-gradient(135deg, #1e3a5f 0%, #1e40af 100%); color: white; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 12px rgba(0,0,0,0.2); }
+  .header-left { display: flex; align-items: center; gap: 12px; }
+  .header-logo { width: 38px; height: 38px; background: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 900; color: #1e40af; font-size: 14px; }
+  .header-title h1 { font-size: 17px; font-weight: 700; }
+  .header-title p { font-size: 11px; opacity: 0.78; margin-top: 1px; }
+  .header-badge { background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.3); border-radius: 20px; padding: 4px 14px; font-size: 11px; font-weight: 600; }
+
+  /* TABS */
+  .tabs-bar { background: white; border-bottom: 2px solid var(--gray3); padding: 0 24px; display: flex; gap: 0; overflow-x: auto; }
+  .tab-btn { padding: 13px 20px; border: none; background: none; cursor: pointer; font-size: 12.5px; font-weight: 600; color: var(--gray2); border-bottom: 3px solid transparent; margin-bottom: -2px; white-space: nowrap; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+  .tab-btn:hover { color: var(--blue-light); }
+  .tab-btn.active { color: var(--blue); border-bottom-color: var(--blue); }
+  .tab-icon { font-size: 14px; }
+
+  /* PAGES */
+  .page { display: none; padding: 20px 24px; max-width: 1400px; }
+  .page.active { display: block; }
+
+  /* GRID HELPERS */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
+
+  /* CARD */
+  .card { background: var(--white); border-radius: 12px; box-shadow: var(--shadow); overflow: hidden; }
+  .card-header { padding: 14px 18px; border-bottom: 1px solid var(--gray3); display: flex; align-items: center; justify-content: space-between; }
+  .card-title { font-size: 13px; font-weight: 700; color: var(--gray); display: flex; align-items: center; gap: 6px; }
+  .card-body { padding: 16px 18px; }
+
+  /* KPI CARD */
+  .kpi { background: white; border-radius: 12px; padding: 16px 18px; box-shadow: var(--shadow); border-left: 4px solid transparent; }
+  .kpi.blue { border-left-color: var(--blue-light); }
+  .kpi.green { border-left-color: var(--green-light); }
+  .kpi.red { border-left-color: var(--red-light); }
+  .kpi.orange { border-left-color: var(--orange-light); }
+  .kpi-label { font-size: 11px; color: var(--gray2); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .kpi-value { font-size: 22px; font-weight: 800; line-height: 1; }
+  .kpi-value.blue { color: var(--blue); }
+  .kpi-value.green { color: var(--green-light); }
+  .kpi-value.red { color: var(--red-light); }
+  .kpi-value.orange { color: var(--orange-light); }
+  .kpi-sub { font-size: 11px; color: var(--gray2); margin-top: 5px; }
+
+  /* INFO TABLE */
+  .info-row { display: flex; padding: 8px 0; border-bottom: 1px solid var(--gray3); }
+  .info-row:last-child { border-bottom: none; }
+  .info-label { min-width: 180px; color: var(--gray2); font-size: 12px; font-weight: 600; }
+  .info-value { color: var(--gray); font-size: 12px; font-weight: 500; }
+
+  /* DATA TABLES */
+  .tbl { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .tbl th { background: #f0f4ff; color: var(--blue); font-weight: 700; padding: 9px 10px; text-align: left; border-bottom: 2px solid #c7d7f5; position: sticky; top: 0; z-index: 10; white-space: nowrap; }
+  .tbl td { padding: 7px 10px; border-bottom: 1px solid #f1f1f1; vertical-align: middle; }
+  .tbl tr:hover td { background: #f8faff; }
+  .tbl tr.highlight-red td { background: #fff5f5; }
+  .tbl tr.highlight-orange td { background: #fffbf0; }
+  .tbl tr.highlight-green td { background: #f0fff4; }
+  .tbl tr.section-header td { background: #e8edf8; font-weight: 700; color: var(--blue); font-size: 11.5px; }
+  .tbl-wrap { overflow-x: auto; max-height: 480px; overflow-y: auto; border-radius: 0 0 8px 8px; }
+
+  /* BADGES */
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 10.5px; font-weight: 700; white-space: nowrap; }
+  .badge-red { background: var(--red-pale); color: var(--red); }
+  .badge-green { background: var(--green-pale); color: var(--green); }
+  .badge-orange { background: var(--orange-pale); color: var(--orange); }
+  .badge-blue { background: var(--blue-pale); color: var(--blue); }
+  .badge-gray { background: var(--gray3); color: var(--gray2); }
+
+  /* NUMBER FORMATTING */
+  .num-red { color: var(--red-light); font-weight: 700; }
+  .num-green { color: #16a34a; font-weight: 700; }
+  .num-orange { color: var(--orange-light); font-weight: 700; }
+  .num-blue { color: var(--blue-light); font-weight: 600; }
+  .num-gray { color: var(--gray2); }
+
+  /* SECTION TITLE */
+  .section-title { font-size: 14px; font-weight: 800; color: var(--blue); margin-bottom: 12px; padding-bottom: 6px; border-bottom: 2px solid var(--blue-pale); display: flex; align-items: center; gap: 6px; }
+  .mb-16 { margin-bottom: 16px; }
+  .mt-16 { margin-top: 16px; }
+  .mt-20 { margin-top: 20px; }
+
+  /* PROGRESS BAR */
+  .progress-wrap { background: var(--gray3); border-radius: 6px; height: 8px; overflow: hidden; margin-top: 4px; }
+  .progress-bar { height: 100%; border-radius: 6px; transition: width 0.6s ease; }
+
+  /* CHART CONTAINER */
+  .chart-box { position: relative; height: 220px; }
+  .chart-box-lg { position: relative; height: 280px; }
+
+  /* TAG */
+  .tag { display: inline-flex; align-items: center; gap: 4px; background: var(--blue-pale); color: var(--blue); padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+
+  /* STATS ROW */
+  .stats-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+  .stat-chip { background: white; border: 1px solid var(--gray3); border-radius: 8px; padding: 6px 12px; font-size: 11.5px; display: flex; align-items: center; gap: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  .stat-chip .dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  /* FILTER BAR */
+  .filter-bar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .filter-btn { padding: 5px 14px; border-radius: 20px; border: 1.5px solid var(--gray3); background: white; cursor: pointer; font-size: 11.5px; font-weight: 600; color: var(--gray2); transition: all 0.2s; }
+  .filter-btn.active { background: var(--blue); border-color: var(--blue); color: white; }
+  .filter-btn:hover:not(.active) { border-color: var(--blue-light); color: var(--blue); }
+
+  /* DIVIDER */
+  .divider { height: 1px; background: var(--gray3); margin: 16px 0; }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .grid-4, .grid-5 { grid-template-columns: repeat(2, 1fr); }
+    .grid-3 { grid-template-columns: 1fr; }
+    .grid-2 { grid-template-columns: 1fr; }
+  }
+
+  /* SUMMARY BOX */
+  .sum-box { background: linear-gradient(135deg, #1e3a5f, #2563eb); color: white; border-radius: 12px; padding: 20px 24px; }
+  .sum-box-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .sum-box-label { font-size: 12px; opacity: 0.8; }
+  .sum-box-val { font-size: 18px; font-weight: 800; }
+  .sum-divider { border: none; border-top: 1px solid rgba(255,255,255,0.2); margin: 12px 0; }
+
+  /* TOOLTIP */
+  [data-tip] { position: relative; cursor: help; }
+  .icon-btn { background: none; border: none; cursor: pointer; font-size: 13px; color: var(--gray2); }
+
+  /* DIFF CHIP */
+  .diff-pos { color: #dc2626; background: #fee2e2; padding: 2px 7px; border-radius: 10px; font-size: 11px; font-weight: 700; }
+  .diff-neg { color: #16a34a; background: #dcfce7; padding: 2px 7px; border-radius: 10px; font-size: 11px; font-weight: 700; }
+  .diff-zero { color: var(--gray2); background: var(--gray3); padding: 2px 7px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+
+  /* SUB-TABS */
+  .subtabs-bar { display: flex; gap: 0; border-bottom: 2px solid var(--gray3); margin-bottom: 18px; background: #f8faff; border-radius: 10px 10px 0 0; overflow: hidden; }
+  .subtab-btn { padding: 10px 22px; border: none; background: none; cursor: pointer; font-size: 12.5px; font-weight: 600; color: var(--gray2); border-bottom: 3px solid transparent; margin-bottom: -2px; white-space: nowrap; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+  .subtab-btn:hover { color: var(--blue-light); background: #eff6ff; }
+  .subtab-btn.active { color: var(--blue); border-bottom-color: var(--blue); background: white; }
+  .subpage { display: none; }
+  .subpage.active { display: block; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <div class="header-logo">FRT</div>
+    <div class="header-title">
+      <h1>Dashboard Quản Lý Quyết Toán Công Trình</h1>
+      <p>Ban CSVC FPT Retail</p>
+    </div>
+  </div>
+  <div class="header-badge">📅 Cập nhật: 14/04/2026</div>
+</div>
+
+<!-- MAIN TABS -->
+<div class="tabs-bar">
+  <button class="tab-btn active" onclick="showMainTab('m1')" id="btn-m1">
+    <span class="tab-icon">🌐</span> Tổng Quan Công Trình
+  </button>
+  <button class="tab-btn" onclick="showMainTab('m2')" id="btn-m2">
+    <span class="tab-icon">🏗️</span> Chi Tiết Công Trình
+  </button>
+</div>
+
+<!-- ============================================================ -->
+<!--  M1 - TỔNG QUAN TẤT CẢ CÔNG TRÌNH                          -->
+<!-- ============================================================ -->
+<div class="page active" id="m1">
+
+  <!-- KPI Tổng hệ thống -->
+  <div class="grid-5 mb-16">
+    <div class="kpi blue">
+      <div class="kpi-label">🏗️ Tổng Công Trình</div>
+      <div class="kpi-value blue">145</div>
+      <div class="kpi-sub">Đang quản lý 2025–2026</div>
+    </div>
+    <div class="kpi orange">
+      <div class="kpi-label">⚠️ CT Có HM Sai Lệch</div>
+      <div class="kpi-value orange">127</div>
+      <div class="kpi-sub">87.6% số công trình</div>
+    </div>
+    <div class="kpi red">
+      <div class="kpi-label">📈 CT QT Vượt DT</div>
+      <div class="kpi-value red">89</div>
+      <div class="kpi-sub">61.4% số công trình</div>
+    </div>
+    <div class="kpi green">
+      <div class="kpi-label">📉 CT DT Vượt QT</div>
+      <div class="kpi-value green">56</div>
+      <div class="kpi-sub">38.6% số công trình</div>
+    </div>
+    <div class="kpi blue">
+      <div class="kpi-label">💰 Tổng Giá Trị QT</div>
+      <div class="kpi-value blue" style="font-size:16px">77.2 tỷ ₫</div>
+      <div class="kpi-sub">Trước VAT</div>
+    </div>
+  </div>
+
+  <!-- Chart + Stats -->
+  <div class="grid-2 mb-16">
+    <div class="card">
+      <div class="card-header"><div class="card-title">📊 Số Công Trình Sai Theo Giai Đoạn</div></div>
+      <div class="card-body">
+        <div class="chart-box-lg"><canvas id="chartAllProj"></canvas></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">&#128293; H&#7841;ng M&#7909;c Sai Theo G&#243;i &amp; Lo&#7841;i L&#7895;i</div></div>
+      <div class="card-body" id="heatmapHM" style="padding:12px;"></div>
+    </div>
+  </div>
+
+  <!-- Bảng tổng hợp tất cả công trình -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">📋 Bảng So Sánh Chênh Lệch DT / QT Tất Cả Công Trình</div>
+      <div class="filter-bar">
+        <button class="filter-btn active" onclick="filterProj('tat-ca', this)">Tất Cả (145)</button>
+        <button class="filter-btn" onclick="filterProj('vuot', this)">QT Vượt DT (89)</button>
+        <button class="filter-btn" onclick="filterProj('duoi', this)">QT Dưới DT (56)</button>
+      </div>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl" id="tblProj">
+        <thead>
+          <tr>
+            <th>STT</th>
+            <th>Mã CT</th>
+            <th>Tên / Địa Chỉ</th>
+            <th style="text-align:center">Size</th>
+            <th style="text-align:center">Nhà Thầu</th>
+            <th style="text-align:right">Dự Toán (₫)</th>
+            <th style="text-align:right">Quyết Toán (₫)</th>
+            <th style="text-align:right">Chênh Lệch (₫)</th>
+            <th style="text-align:center">%</th>
+            <th style="text-align:center">HM Lệch</th>
+            <th style="text-align:center">Trạng Thái</th>
+          </tr>
+        </thead>
+        <tbody id="tbodyProj"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- ============================================================ -->
+<!--  M2 - CHI TIẾT CÔNG TRÌNH (sub-tabs)                        -->
+<!-- ============================================================ -->
+<div class="page" id="m2">
+
+  <!-- SUB TABS -->
+    <div class="subtabs-bar">
+    <button class="subtab-btn active" onclick="showSubTab('s_ncc')" id="sbtn-s_ncc"><span>🔍</span> Kiểm Tra File NCC</button>
+    <button class="subtab-btn" onclick="showSubTab('s_3gd')" id="sbtn-s_3gd"><span>📊</span> 3 Giai Đoạn: DT / NT / QT</button>
+    <button class="subtab-btn" onclick="showSubTab('s_log')" id="sbtn-s_log"><span>🕑</span> Log Điều Chỉnh</button>
+  </div>
+
+    <!-- === KiemTraNCC === -->
+  <div class="subpage active" id="s_ncc">
+  <div class="grid-5 mb-16">
+    <div class="kpi blue"><div class="kpi-label">📦 Tổng HM</div><div class="kpi-value blue">126</div><div class="kpi-sub">4 gói thầu</div></div>
+    <div class="kpi green"><div class="kpi-label">✅ Hợp Lệ</div><div class="kpi-value green" id="kpi-ok">—</div><div class="kpi-sub">Khớp Masterdata</div></div>
+    <div class="kpi red"><div class="kpi-label">💰 Sai Đơn Giá</div><div class="kpi-value red" id="kpi-gia">—</div><div class="kpi-sub">ĐG NCC ≠ đơn giá chuẩn MD</div></div>
+    <div class="kpi orange"><div class="kpi-label">📐 Sai Đơn Vị</div><div class="kpi-value orange" id="kpi-dvt">—</div><div class="kpi-sub">ĐVT NCC ≠ ĐVT MD</div></div>
+    <div class="kpi orange"><div class="kpi-label">⚠️ Ngoài MD</div><div class="kpi-value orange">2</div><div class="kpi-sub">Mã Temp — cần chuẩn hóa</div></div>
+  </div>
+
+  <div style="background:#fef9c3;border:1px solid #fde047;border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:12px;display:flex;gap:10px;align-items:flex-start;">
+    <span>📌</span>
+    <div>
+      <strong>Mục đích kiểm tra file NCC:</strong> So sánh với <strong>Masterdata (MD ver.20250101)</strong><br>
+      <span style="color:#c2410c">● Sai đơn giá</span>: yêu cầu NCC điều chỉnh về đúng đơn giá chuẩn &nbsp;
+      <span style="color:#c2410c">● Sai đơn vị tính</span>: kiểm tra quy cách, lại khối lượng &nbsp;
+      <span style="color:#c2410c">● Mã Temp</span>: cần mã hóa vào MD hoặc xin phép phát sinh
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">🔍 File NCC vs Masterdata — Đơn Giá / Đơn Vị Tính / Quy Cách</div>
+      <div class="filter-bar" id="ncc-filter-bar">
+        <button class="filter-btn active" onclick="filterNCC('all',this)">Tất Cả (126)</button>
+        <button class="filter-btn" onclick="filterNCC('sai-gia',this)">💰 Sai Đơn Giá</button>
+        <button class="filter-btn" onclick="filterNCC('sai-dvt',this)">📐 Sai ĐVT</button>
+        <button class="filter-btn" onclick="filterNCC('ngoai-md',this)">⚠️ Ngoài MD (2)</button>
+        <button class="filter-btn" onclick="filterNCC('ok',this)">✅ OK</button>
+      </div>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl" id="tblNCC">
+        <thead>
+          <tr>
+            <th style="width:35px">STT</th>
+            <th style="width:115px">Mã HM</th>
+            <th>Tên Hạng Mục</th>
+            <th style="width:65px">Gói</th>
+            <th style="text-align:center;width:85px">ĐVT (NCC)</th>
+            <th style="text-align:center;width:85px">ĐVT (MD)</th>
+            <th style="text-align:center;width:50px">✓ ĐVT</th>
+            <th style="text-align:right;width:115px">Đơn Giá NCC (₫)</th>
+            <th style="text-align:right;width:115px">Đơn Giá MD (₫)</th>
+            <th style="text-align:right;width:95px">Chênh (₫)</th>
+            <th style="text-align:center;width:65px">% ĐG</th>
+            <th style="text-align:center;width:50px">✓ ĐG</th>
+            <th style="text-align:center;width:95px">Kết Quả</th>
+          </tr>
+        </thead>
+        <tbody id="tbodyNCC"></tbody>
+      </table>
+    </div>
+  </div>
+  </div><!-- end s_ncc -->
+  <!-- === 3GiaiDoan === -->
+  <div class="subpage" id="s_3gd">
+  <div class="grid-4 mb-16">
+    <div class="card" style="border-top:4px solid #3b82f6">
+      <div class="card-body" style="padding:14px;">
+        <div style="font-size:11px;font-weight:800;color:#1e40af;text-transform:uppercase;margin-bottom:8px">📦 Xây Dựng &amp; ME</div>
+        <div class="info-row"><div class="info-label" style="min-width:90px;font-size:11px">Dự Toán</div><div class="info-value num-blue" style="font-size:11.5px">168.754.339 ₫</div></div>
+        <div class="info-row"><div class="info-label" style="min-width:90px;font-size:11px">Nghiệm Thu</div><div class="info-value num-blue" style="font-size:11.5px">~175.000.000 ₫</div></div>
+        <div class="info-row"><div class="info-label" style="min-width:90px;font-size:11px">Quyết Toán</div><div class="info-value num-red" style="font-size:11.5px">191.674.638 ₫</div></div>
+        <div style="margin-top:6px"><span class="diff-pos">+22.920.299</span> <span style="font-size:10px;color:#6b7280">(+13,6%)</span></div>
+        <div style="margin-top:4px"><span class="badge badge-orange">39 HM lệch / 65</span></div>
+      </div>
+    </div>
+    <div class="card" style="border-top:4px solid #22c55e">
+      <div class="card-body" style="padding:14px;">
+        <div style="font-size:11px;font-weight:800;color:#166534;text-transform:uppercase;margin-bottom:8px">🛋️ Nội Thất</div>
+        <div class="info-row"><div class="info-label" style="min-width:90px;font-size:11px">Dự Toán</div><div class="info-value num-blue" style="font-size:11.5px">209.002.675 ₫</div></div>
+        <div class="info-row"><div class="info-label" style="min-width:90px;font-size:11px">Nghiệm Thu</div><div class="info-value num-blue" style="font-size:11.5px">~200.000.000 ₫</div></div>
+        <div class="info-row"><div class="info-label" style="min-width:90px;font-size:11px">Quyết Toán</div><div class="info-value num-green" style="font-size:11.5px">192.630.730 ₫</div></div>
+        <div style="margin-top:6px"><span class="diff-neg">-16.371.945</span> <span style="font-size:10px;color:#6b7280">(-7,8%)</span></div>
+        <div style="margin-top:4px"><span class="badge badge-orange">7 HM lệch / 16</span></div>
+      </div>
+    </div>
+    <div class="card" style="border-top:4px solid #f97316">
+      <div class="card-body" style="padding:14px;">
+        <div style="font-size:11px;font-weight:800;color:#c2410c;text-transform:uppercase;margin-bottom:8px">📢 Quảng Cáo</div>
+        <div class="info-row"><div class="info-label" style="min-width:90px;font-size:11px">Dự Toán</div><div class="info-value num-blue" style="font-size:11.5px">161.973.681 ₫</div></div>
+        <div class="info-row"><div class="info-label" style="min-width:90px;font-size:11px">Nghiệm Thu</div><div class="info-value num-blue" style="font-size:11.5px">~165.000.000 ₫</div></div>
+        <div class="info-row"><div class="info-label" style="min-width:90px;font-size:11px">Quyết Toán</div><div class="info-value num-red" style="font-size:11.5px">171.528.604 ₫</div></div>
+        <div style="margin-top:6px"><span class="diff-pos">+9.554.923</span> <span style="font-size:10px;color:#6b7280">(+5,9%)</span></div>
+        <div style="margin-top:4px"><span class="badge badge-orange">24 HM lệch / 29</span></div>
+      </div>
+    </div>
+    <div class="card" style="border-top:4px solid #a855f7">
+      <div class="card-body" style="padding:14px;">
+        <div style="font-size:11px;font-weight:800;color:#7e22ce;text-transform:uppercase;margin-bottom:8px">❄️ Máy Lạnh</div>
+        <div class="info-row"><div class="info-label" style="min-width:90px;font-size:11px">Dự Toán</div><div class="info-value num-blue" style="font-size:11.5px">10.965.000 ₫</div></div>
+        <div class="info-row"><div class="info-label" style="min-width:90px;font-size:11px">Nghiệm Thu</div><div class="info-value num-blue" style="font-size:11.5px">~8.500.000 ₫</div></div>
+        <div class="info-row"><div class="info-label" style="min-width:90px;font-size:11px">Quyết Toán</div><div class="info-value num-green" style="font-size:11.5px">6.735.000 ₫</div></div>
+        <div style="margin-top:6px"><span class="diff-neg">-4.230.000</span> <span style="font-size:10px;color:#6b7280">(-38,6%)</span></div>
+        <div style="margin-top:4px"><span class="badge badge-orange">2 HM lệch / 8</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2 mb-16">
+    <div class="card">
+      <div class="card-header"><div class="card-title">📊 So Sánh DT / NT / QT Theo Gói (triệu ₫)</div></div>
+      <div class="card-body"><div class="chart-box-lg"><canvas id="chart3GD"></canvas></div></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">📈 Phân Loại Sai Lệch DT → QT</div></div>
+      <div class="card-body"><div class="chart-box-lg"><canvas id="chartLech3GD"></canvas></div></div>
+    </div>
+  </div>
+
+  <div class="card mb-16">
+    <div class="card-header">
+      <div class="card-title">📋 Bảng Chi Tiết 3 Giai Đoạn — DT / NT / QT</div>
+      <div class="filter-bar" id="filter3gd-bar">
+        <button class="filter-btn active" onclick="filter3GD('all',this)">Tất Cả (126)</button>
+        <button class="filter-btn" onclick="filter3GD('phat-sinh',this)">🆕 Phát Sinh (15)</button>
+        <button class="filter-btn" onclick="filter3GD('bi-bot',this)">❌ Bị Bớt (5)</button>
+        <button class="filter-btn" onclick="filter3GD('tang',this)">📈 Tăng GT</button>
+        <button class="filter-btn" onclick="filter3GD('giam',this)">📉 Giảm GT</button>
+        <button class="filter-btn" onclick="filter3GD('lech-dt-nt',this)">Lệch DT↔NT</button>
+        <button class="filter-btn" onclick="filter3GD('lech-nt-qt',this)">Lệch NT↔QT</button>
+      </div>
+    </div>
+    <div class="tbl-wrap" style="max-height:540px;">
+      <table class="tbl" id="tbl3GD">
+        <thead>
+          <tr>
+            <th style="width:35px">STT</th>
+            <th style="width:105px">Mã HM</th>
+            <th>Tên Hạng Mục</th>
+            <th style="width:70px">Gói</th>
+            <th style="text-align:right;width:105px">Tiền DT (₫)</th>
+            <th style="text-align:right;width:105px">Tiền NT (₫)</th>
+            <th style="text-align:right;width:90px">Lệch DT→NT</th>
+            <th style="text-align:right;width:105px">Tiền QT (₫)</th>
+            <th style="text-align:right;width:90px">Lệch NT→QT</th>
+            <th style="text-align:right;width:90px">Tổng Lệch</th>
+            <th style="text-align:center;width:90px">Phân Loại</th>
+          </tr>
+        </thead>
+        <tbody id="tbody3GD"></tbody>
+      </table>
+    </div>
+  </div>
+  </div><!-- end s_3gd -->
+
+  <!-- ========== PHASE 4: LỊCH SỬ ĐIỀU CHỈNH ========== -->
+  <div class="subpage" id="s_log">
+
+  <div style="display:grid;grid-template-columns:1fr 1.6fr;gap:16px;align-items:start;margin-bottom:16px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div class="kpi blue">
+        <div class="kpi-label">📝 Tổng Lần Điều Chỉnh</div>
+        <div class="kpi-value blue">7</div>
+        <div class="kpi-sub">Kể từ DT ban đầu</div>
+      </div>
+      <div class="kpi red">
+        <div class="kpi-label">📈 Tổng Phát Sinh Thêm</div>
+        <div class="kpi-value red">+38,8 tr ₫</div>
+        <div class="kpi-sub">4 lần điều chỉnh tăng</div>
+      </div>
+      <div class="kpi green">
+        <div class="kpi-label">📉 Tổng Giảm Bớt</div>
+        <div class="kpi-value green">-26,9 tr ₫</div>
+        <div class="kpi-sub">3 lần điều chỉnh giảm</div>
+      </div>
+      <div class="kpi orange">
+        <div class="kpi-label">💰 Chênh Lệch Ròng</div>
+        <div class="kpi-value orange">+11,9 tr ₫</div>
+        <div class="kpi-sub">QT cuối so với DT ban đầu</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">📈 Biểu Đồ Lũy Kế Điều Chỉnh (triệu ₫)</div></div>
+      <div class="card-body"><div class="chart-box-lg"><canvas id="chartLogTrend"></canvas></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">📋 Log Chi Tiết Tất Cả Lần Điều Chỉnh Sai Lệch</div>
+      <div class="filter-bar" id="log-filter-bar">
+        <button class="filter-btn active" onclick="filterLog('all', this)">Tất Cả</button>
+        <button class="filter-btn" onclick="filterLog('tang', this)">Tăng Giá Trị</button>
+        <button class="filter-btn" onclick="filterLog('giam', this)">Giảm Giá Trị</button>
+        <button class="filter-btn" onclick="filterLog('phat-sinh', this)">HM Phát Sinh</button>
+        <button class="filter-btn" onclick="filterLog('bo-bot', this)">HM Bỏ Bớt</button>
+      </div>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl" id="tblLog">
+        <thead>
+          <tr>
+            <th style="width:35px">STT</th>
+            <th style="width:90px">Ngày</th>
+            <th style="width:110px">Mã HM</th>
+            <th>Tên Hạng Mục</th>
+            <th style="width:70px">Gói</th>
+            <th style="text-align:center;width:80px">Loại Điều Chỉnh</th>
+            <th style="text-align:right;width:100px">Giá Trị Trước (₫)</th>
+            <th style="text-align:right;width:100px">Giá Trị Sau (₫)</th>
+            <th style="text-align:right;width:100px">Thay Đổi (₫)</th>
+            <th style="width:140px">Lý Do / Ghi Chú</th>
+          </tr>
+        </thead>
+        <tbody id="tbodyLog"></tbody>
+      </table>
+    </div>
+  </div>
+
+  </div><!-- end s_log -->
+</div><!-- end m2 -->
+
+<script>
+// ============================================================
+//  DATA
+// ============================================================
+const allItems = [
+  // XD-ME
+  {stt:1, ma:"HM200223-2", ten:"Hàng rào che chắn công trình (bạt sọc 3 màu)", dvt:"m2", goi:"XD-ME", dg:16000, dt:448000, qt:448000},
+  {stt:2, ma:"HM220822-1", ten:"Bạt Hiflex (hai da) in nội dung theo marquette", dvt:"m2", goi:"XD-ME", dg:42000, dt:630000, qt:630000},
+  {stt:3, ma:"HM200223-4", ten:"Phá dỡ mái tôn, trần thạch cao, hàng rào...", dvt:"m2", goi:"XD-ME", dg:44000, dt:2431000, qt:2308680},
+  {stt:4, ma:"HM240408-7", ten:"Nhân công 4.5/7 - Nhóm 2 (cắt tường/dầm)", dvt:"công", goi:"XD-ME", dg:600000, dt:2400000, qt:2400000},
+  {stt:5, ma:"HM200225-3", ten:"Phá dỡ BTCT Cột/Dầm/Đà (cắt dầm trên cửa)", dvt:"md", goi:"XD-ME", dg:110000, dt:310200, qt:0},
+  {stt:6, ma:"HM210102-4", ten:"Phá dỡ tường dày 200mm thu dọn phế thải", dvt:"m2", goi:"XD-ME", dg:44000, dt:709122, qt:634480},
+  {stt:7, ma:"HM200223-6", ten:"Phá dỡ vách kính, cửa nhôm kính, mặt đá...", dvt:"m2", goi:"XD-ME", dg:66000, dt:1648845, qt:1142599},
+  {stt:8, ma:"HM200224-2", ten:"Tháo dỡ & chờ tận dụng cửa nhôm kính", dvt:"bộ", goi:"XD-ME", dg:280000, dt:560000, qt:280000},
+  {stt:9, ma:"HM200408-1", ten:"Phá dỡ cửa cuốn, cửa sắt kéo", dvt:"bộ", goi:"XD-ME", dg:610000, dt:610000, qt:610000},
+  {stt:10, ma:"HM210115-4", ten:"Phá dỡ hệ thống thiết bị điện (đèn, quạt...)", dvt:"m2", goi:"XD-ME", dg:23000, dt:805000, qt:805000},
+  {stt:11, ma:"HM200218-5", ten:"Phá dỡ, đào đục nền cứng (bê tông, gạch...)", dvt:"m3", goi:"XD-ME", dg:1047000, dt:1832250, qt:4648680},
+  {stt:12, ma:"HM230801-2", ten:"Vận chuyển & đổ bỏ xà bần, phế thải (xe tải)", dvt:"Cái", goi:"XD-ME", dg:920000, dt:3680000, qt:3680000},
+  {stt:13, ma:"HM200309-3", ten:"Móng bằng BTCT hộc đơn giản", dvt:"cái", goi:"XD-ME", dg:770000, dt:2310000, qt:770000},
+  {stt:14, ma:"HM200203-8", ten:"Cấu kiện cột BTCT chữ nhật đổ tại chỗ", dvt:"md", goi:"XD-ME", dg:639000, dt:14550030, qt:11438100},
+  {stt:15, ma:"HM200225-8", ten:"Xây tường 200mm (gạch đặc / rỗng)", dvt:"m2", goi:"XD-ME", dg:309000, dt:715644, qt:1423872},
+  {stt:16, ma:"HM240408-7", ten:"Nhân công 4.5/7 - Nhóm 2 (cắt tường nền)", dvt:"công", goi:"XD-ME", dg:600000, dt:1800000, qt:2400000},
+  {stt:17, ma:"HM200219-1", ten:"Bê tông đá mi nền láng phẳng", dvt:"m2", goi:"XD-ME", dg:231000, dt:0, qt:4464075},
+  {stt:18, ma:"HM220822-9", ten:"Bản mã kết nối dầm/cột thép", dvt:"cái", goi:"XD-ME", dg:67000, dt:536000, qt:536000},
+  {stt:19, ma:"HM230805-8", ten:"Lát nền shop (đá granite/ceramic)", dvt:"m2", goi:"XD-ME", dg:363000, dt:15157065, qt:16660684},
+  {stt:20, ma:"HM200217-8", ten:"Láng nền dày 3cm cốt thép", dvt:"m2", goi:"XD-ME", dg:129000, dt:5386395, qt:5771460},
+  {stt:21, ma:"HM230805-9", ten:"Ốp cạnh bậc cầu thang (đá/gạch)", dvt:"md", goi:"XD-ME", dg:191000, dt:2580410, qt:4005270},
+  {stt:22, ma:"HM200203-5", ten:"Cấu kiện cột VUÔNG thép hộp/ống", dvt:"md", goi:"XD-ME", dg:20000, dt:456000, qt:1964400},
+  {stt:23, ma:"HM200205-5", ten:"Ốp kính thủy tinh cường lực (cột/vách)", dvt:"m2", goi:"XD-ME", dg:440000, dt:1977800, qt:9666360},
+  {stt:24, ma:"HM240606-2", ten:"Nẹp nhôm chữ V ốp cạnh/góc", dvt:"md", goi:"XD-ME", dg:68000, dt:1475600, qt:3583600},
+  {stt:25, ma:"HM200222-8", ten:"Vách thạch cao khung CW (đơn/đôi)", dvt:"m2", goi:"XD-ME", dg:183000, dt:3923520, qt:4564020},
+  {stt:26, ma:"HM200222-6", ten:"Trần thạch cao khung chìm (đơn)", dvt:"m2", goi:"XD-ME", dg:187000, dt:6545000, qt:6545000},
+  {stt:27, ma:"HM231001-1", ten:"Cấu kiện kèo/xà gồ thép cán nguội", dvt:"md", goi:"XD-ME", dg:121000, dt:3421880, qt:3228280},
+  {stt:28, ma:"HM200203-2", ten:"Cấu kiện cột sắt hộp vuông/chữ nhật", dvt:"md", goi:"XD-ME", dg:60000, dt:0, qt:390000},
+  {stt:29, ma:"HM200205-3", ten:"Vách kính cường lực khung nhôm", dvt:"m2", goi:"XD-ME", dg:862000, dt:13558398, qt:13558398},
+  {stt:30, ma:"HM200101-8", ten:"Bộ phụ kiện cửa kính cường lực tự động", dvt:"Bộ", goi:"XD-ME", dg:2540000, dt:15240000, qt:15240000},
+  {stt:31, ma:"HM200409-3", ten:"Ray chống rung cửa kính trượt", dvt:"md", goi:"XD-ME", dg:116000, dt:3340800, qt:5805800},
+  {stt:32, ma:"HM200104-2", ten:"Bộ khóa ngang cửa kính", dvt:"bộ", goi:"XD-ME", dg:877000, dt:877000, qt:0},
+  {stt:33, ma:"HM200105-3", ten:"Pat khóa cửa kính (floor spring)", dvt:"cái", goi:"XD-ME", dg:72000, dt:144000, qt:0},
+  {stt:34, ma:"HM200418-1", ten:"Cửa cuốn liền khối sơn tĩnh điện", dvt:"m2", goi:"XD-ME", dg:979000, dt:20934936, qt:20934936},
+  {stt:35, ma:"HM200103-9", ten:"Motor cửa cuốn tự động 1 pha", dvt:"bộ", goi:"XD-ME", dg:4561000, dt:0, qt:4561000},
+  {stt:36, ma:"HM200104-3", ten:"Bình tích điện UPS cửa cuốn", dvt:"bộ", goi:"XD-ME", dg:4950000, dt:4950000, qt:4950000},
+  {stt:37, ma:"HM200102-7", ten:"Cửa đi nhôm kính đơn/đôi swing", dvt:"m2", goi:"XD-ME", dg:1392000, dt:2449920, qt:2449920},
+  {stt:38, ma:"HM200103-4", ten:"Khóa cửa tay nắm tròn (mortise lock)", dvt:"Bộ", goi:"XD-ME", dg:293000, dt:293000, qt:293000},
+  {stt:39, ma:"HM240229-1", ten:"Dán DECAL in UV mờ/sáng mặt kính", dvt:"m2", goi:"XD-ME", dg:186000, dt:449525, qt:449525},
+  {stt:40, ma:"HM200115-8", ten:"Đèn đôi LED thanh (T8/T5 đơn 2 bóng)", dvt:"bộ", goi:"XD-ME", dg:250000, dt:5000000, qt:3500000},
+  {stt:41, ma:"HM200106-5", ten:"Quạt đảo trần công nghiệp (56 inch)", dvt:"cái", goi:"XD-ME", dg:824000, dt:5768000, qt:5768000},
+  {stt:42, ma:"HM200107-5", ten:"Dây điện đôi 2x10mm² chống cháy", dvt:"md", goi:"XD-ME", dg:93000, dt:1395000, qt:604500},
+  {stt:43, ma:"HM230804-3", ten:"Dây điện đơn 1x4.0mm² (CVV)", dvt:"md", goi:"XD-ME", dg:19000, dt:912000, qt:874000},
+  {stt:44, ma:"HM200108-2", ten:"Dây điện đơn 1x2.5mm²", dvt:"md", goi:"XD-ME", dg:13000, dt:2834000, qt:2977000},
+  {stt:45, ma:"HM200108-4", ten:"Dây điện đơn 1x1.5mm²", dvt:"md", goi:"XD-ME", dg:10000, dt:3100000, qt:3170000},
+  {stt:46, ma:"HM200113-7", ten:"Tủ điện phân phối CB tổng + nhánh", dvt:"cái", goi:"XD-ME", dg:705000, dt:705000, qt:705000},
+  {stt:47, ma:"HM200113-9", ten:"Tủ điện tổng kín nắp đậy an toàn", dvt:"cái", goi:"XD-ME", dg:400000, dt:0, qt:400000},
+  {stt:48, ma:"HM200113-1", ten:"Aptomat CB 2P 32A MCB", dvt:"cái", goi:"XD-ME", dg:237000, dt:237000, qt:237000},
+  {stt:49, ma:"HM200112-5", ten:"Aptomat CB 1P 20A MCB", dvt:"cái", goi:"XD-ME", dg:111000, dt:555000, qt:666000},
+  {stt:50, ma:"HM190523-1", ten:"Ổ cắm đa năng âm sàn / mặt nước", dvt:"cái", goi:"XD-ME", dg:220000, dt:660000, qt:660000},
+  {stt:51, ma:"HM230804-9", ten:"Bộ công tắc 4 cực đơn", dvt:"Cái", goi:"XD-ME", dg:82000, dt:82000, qt:82000},
+  {stt:52, ma:"HM230804-8", ten:"Bộ công tắc 3 cực đơn", dvt:"Cái", goi:"XD-ME", dg:71000, dt:71000, qt:71000},
+  {stt:53, ma:"HM230804-6", ten:"Bộ công tắc 1 cực đơn", dvt:"cái", goi:"XD-ME", dg:48000, dt:144000, qt:144000},
+  {stt:54, ma:"HM230805-4", ten:"Bộ ổ cắm đôi 2P+E an toàn", dvt:"cái", goi:"XD-ME", dg:81000, dt:405000, qt:405000},
+  {stt:55, ma:"HM200108-6", ten:"Ống ruột gà kim loại Φ20mm", dvt:"md", goi:"XD-ME", dg:4000, dt:600000, qt:672000},
+  {stt:56, ma:"HM200105-5", ten:"Dây cáp mạng CAT6 UTP", dvt:"md", goi:"XD-ME", dg:11000, dt:3520000, qt:3421000},
+  {stt:57, ma:"HM240329-9", ten:"Máng gen nhựa SP 60x30mm", dvt:"Cây(2m)", goi:"XD-ME", dg:105000, dt:315000, qt:105000},
+  {stt:58, ma:"HM240330-7", ten:"Máng gen nhựa SP 25x17mm", dvt:"Cây(2m)", goi:"XD-ME", dg:32000, dt:64000, qt:64000},
+  {stt:59, ma:"HM310523-9", ten:"Nẹp sàn nhôm che dây điện", dvt:"Cây(1m)", goi:"XD-ME", dg:135000, dt:270000, qt:135000},
+  {stt:60, ma:"HM200212-8", ten:"Ống nước PPR D21mm (cấp nước lạnh)", dvt:"md", goi:"XD-ME", dg:14000, dt:420000, qt:448000},
+  {stt:61, ma:"HM200213-8", ten:"Co L/T/nối ống nước D21mm", dvt:"Cái", goi:"XD-ME", dg:6000, dt:90000, qt:120000},
+  {stt:62, ma:"HM310523-1", ten:"Van khóa nước Φ21mm", dvt:"cái", goi:"XD-ME", dg:15000, dt:0, qt:15000},
+  {stt:63, ma:"HM200216-1", ten:"Đồng hồ nước lắp đặt (đồng hồ cơ)", dvt:"cái", goi:"XD-ME", dg:204000, dt:0, qt:204000},
+  {stt:64, ma:"HM200101-1", ten:"Vệ sinh toàn bộ công trình sau thi công", dvt:"m2", goi:"XD-ME", dg:38000, dt:2470000, qt:2470000},
+  {stt:65, ma:"HM200203-5", ten:"Cấu kiện cột VUÔNG (phát sinh thêm)", dvt:"md", goi:"XD-ME", dg:20000, dt:0, qt:516000},
+
+  // Nội Thất
+  {stt:1, ma:"HM221120-1", ten:"Tủ kính lưng nhiều tầng trưng bày thuốc", dvt:"cái", goi:"Nội Thất", dg:8300000, dt:38180000, qt:38180000},
+  {stt:2, ma:"HM221120-3", ten:"Tủ hộc kéo dưới quầy bán hàng", dvt:"cái", goi:"Nội Thất", dg:10500000, dt:33600000, qt:33600000},
+  {stt:3, ma:"HM230901-2", ten:"Tủ hộc kéo cao có khóa (tủ kho)", dvt:"cái", goi:"Nội Thất", dg:10500000, dt:54600000, qt:54600000},
+  {stt:4, ma:"HM221120-5", ten:"Hệ quầy kính trưng bày sản phẩm kèo nghiêng", dvt:"cái", goi:"Nội Thất", dg:6460000, dt:31008000, qt:22803800},
+  {stt:5, ma:"HM221120-8", ten:"Hệ quầy mặt phẳng chính (quầy tư vấn)", dvt:"cái", goi:"Nội Thất", dg:6800000, dt:6800000, qt:6800000},
+  {stt:6, ma:"HM221120-7", ten:"Hệ quầy mặt phẳng phụ (quầy thu ngân)", dvt:"cái", goi:"Nội Thất", dg:6550000, dt:6550000, qt:6550000},
+  {stt:7, ma:"HM221120-9", ten:"Hệ quầy kính nghiêng nhỏ (góc/phụ kiện)", dvt:"cái", goi:"Nội Thất", dg:3400000, dt:3400000, qt:0},
+  {stt:8, ma:"HM221121-1", ten:"Kệ đơn sắt sơn tĩnh điện trưng bày", dvt:"bộ", goi:"Nội Thất", dg:850000, dt:4250000, qt:3400000},
+  {stt:9, ma:"HM221121-2", ten:"Kệ đôi sắt sơn tĩnh điện (back-to-back)", dvt:"bộ", goi:"Nội Thất", dg:1800000, dt:1800000, qt:1800000},
+  {stt:10, ma:"HM210113-2", ten:"Tủ server/router rack mount 6U", dvt:"cái", goi:"Nội Thất", dg:1950000, dt:1950000, qt:1950000},
+  {stt:11, ma:"HM200406-5", ten:"Kệ kho sắt sơn tĩnh điện lắp ghép", dvt:"bộ", goi:"Nội Thất", dg:1320000, dt:6600000, qt:6600000},
+  {stt:12, ma:"HM220223-1", ten:"Poster nổi hộp lightbox in UV", dvt:"m2", goi:"Nội Thất", dg:1900000, dt:15868800, qt:12439680},
+  {stt:13, ma:"HM220504-1", ten:"Thanh ray nhôm treo poster", dvt:"md", goi:"Nội Thất", dg:150000, dt:2160000, qt:2046000},
+  {stt:14, ma:"Temp 2509-18-02", ten:"Poster hộp thuốc (mã ngoài Masterdata)", dvt:"m2", goi:"Nội Thất", dg:370000, dt:1123875, qt:749250},
+  {stt:15, ma:"HM200230-8", ten:"Thay ổ khóa tủ hộc/quầy cũ", dvt:"Cái", goi:"Nội Thất", dg:46000, dt:598000, qt:598000},
+  {stt:16, ma:"HM200410-5", ten:"Cố định thiết bị CCTV/đầu đọc thẻ vào tường", dvt:"cái", goi:"Nội Thất", dg:514000, dt:514000, qt:514000},
+
+  // Quảng Cáo
+  {stt:1, ma:"HM240414-2", ten:"Bản mặt biển hiệu ALU + tấm Hiflex / lam nhôm", dvt:"m2", goi:"Quảng Cáo", dg:571000, dt:65219335, qt:63366497},
+  {stt:2, ma:"HM210113-9", ten:"Bản mặt biển ALU Dibond ốp tôn sơn", dvt:"m2", goi:"Quảng Cáo", dg:452000, dt:9421488, qt:9433692},
+  {stt:3, ma:"HM240627-6", ten:"Bộ chữ nổi inox/nhôm đèn halo", dvt:"m2", goi:"Quảng Cáo", dg:1080000, dt:31793392, qt:33110223},
+  {stt:4, ma:"HM240627-8", ten:"Bộ logo FPT nổi đèn LED (hào quang)", dvt:"m2", goi:"Quảng Cáo", dg:1080000, dt:2492097, qt:2887774},
+  {stt:5, ma:"HM240229-1", ten:"Dán Decal in UV biển hiệu/cửa kính", dvt:"m2", goi:"Quảng Cáo", dg:186000, dt:1315690, qt:1635163},
+  {stt:6, ma:"HM200412-2", ten:"Hộp đèn lightbox một mặt đơn", dvt:"Cái", goi:"Quảng Cáo", dg:5115000, dt:5115000, qt:5115000},
+  {stt:7, ma:"HM200328-3", ten:"Hộp đèn lightbox hai mặt LED", dvt:"Cái", goi:"Quảng Cáo", dg:1287000, dt:5148000, qt:5148000},
+  {stt:8, ma:"HM200301-9", ten:"Cần đèn spotlight chiếu nổi biển", dvt:"Cái", goi:"Quảng Cáo", dg:123000, dt:1722000, qt:1722000},
+  {stt:9, ma:"Temp250910-02", ten:"Lắp đặt cần đèn phát sinh (mã ngoài MD)", dvt:"cái", goi:"Quảng Cáo", dg:150000, dt:0, qt:2100000},
+  {stt:10, ma:"HM200307-3", ten:"Thanh nhôm giằng chống rung biển", dvt:"md", goi:"Quảng Cáo", dg:195000, dt:1505400, qt:1507350},
+  {stt:11, ma:"HM231001-3", ten:"Bộ bu lông móc treo biển hiệu ngoài trời", dvt:"Bộ", goi:"Quảng Cáo", dg:750000, dt:1500000, qt:750000},
+  {stt:12, ma:"HM210113-4", ten:"Gờ tôn thép kẽm chống dột chân biển", dvt:"md", goi:"Quảng Cáo", dg:210000, dt:1621200, qt:2599800},
+  {stt:13, ma:"HM231001-5", ten:"Cấu kiện thép hộp đỡ biển hiệu ngang", dvt:"md", goi:"Quảng Cáo", dg:96000, dt:4608000, qt:2880000},
+  {stt:14, ma:"HM200203-2", ten:"Cấu kiện cột thép hộp đứng đỡ biển", dvt:"md", goi:"Quảng Cáo", dg:60000, dt:5400000, qt:7612200},
+  {stt:15, ma:"HM231001-7", ten:"Cấu kiện cánh tay đòn xiên biển ngang", dvt:"md", goi:"Quảng Cáo", dg:33000, dt:3960000, qt:2909940},
+  {stt:16, ma:"HM200201-3", ten:"Cấu kiện thép dẹp/lá liên kết biển", dvt:"md", goi:"Quảng Cáo", dg:77000, dt:2310000, qt:924000},
+  {stt:17, ma:"HM200201-9", ten:"Sơn chống rỉ bảo vệ kết cấu thép biển", dvt:"m2", goi:"Quảng Cáo", dg:65000, dt:624000, qt:249600},
+  {stt:18, ma:"HM231001-9", ten:"Chống dột mái biển tôn + keo silicone", dvt:"m2", goi:"Quảng Cáo", dg:119000, dt:6430760, qt:3701376},
+  {stt:19, ma:"HM220826-6", ten:"Chốt hãm/tay đỡ panel biển phát sinh", dvt:"md", goi:"Quảng Cáo", dg:73000, dt:0, qt:1168000},
+  {stt:20, ma:"HM200131-6", ten:"Vật tư phụ lắp đặt biển (vít, keo, mastic...)", dvt:"m2", goi:"Quảng Cáo", dg:33000, dt:1783320, qt:1026432},
+  {stt:21, ma:"HM200115-8", ten:"Đèn đôi LED thanh chiếu sáng biển", dvt:"bộ", goi:"Quảng Cáo", dg:250000, dt:1500000, qt:1500000},
+  {stt:22, ma:"HM200212-2", ten:"Ống điện nước D27mm cấp điện biển", dvt:"md", goi:"Quảng Cáo", dg:91000, dt:546000, qt:819000},
+  {stt:23, ma:"HM200213-3", ten:"Co L/T nối ống điện D27mm", dvt:"cái", goi:"Quảng Cáo", dg:32000, dt:96000, qt:128000},
+  {stt:24, ma:"HM240315-8", ten:"Bản vẽ hoàn công biển hiệu (As-built)", dvt:"Cái", goi:"Quảng Cáo", dg:160000, dt:160000, qt:160000},
+  {stt:25, ma:"HM210103-5", ten:"Standee đứng A1 khung nhôm kéo lên", dvt:"Cái", goi:"Quảng Cáo", dg:373000, dt:746000, qt:746000},
+  {stt:26, ma:"HM210103-4", ten:"Standee chân chữ X thép nhẹ A0", dvt:"cái", goi:"Quảng Cáo", dg:956000, dt:956000, qt:956000},
+  {stt:27, ma:"HM221121-4", ten:"Bạt che phủ bảo vệ nội thất khi TC biển", dvt:"md", goi:"Quảng Cáo", dg:800000, dt:6000000, qt:4800000},
+  {stt:28, ma:"HM170523-9", ten:"Thuê máy cẩu xe tải gắn cẩu thi công biển", dvt:"ca", goi:"Quảng Cáo", dg:3500000, dt:0, qt:7000000},
+  {stt:29, ma:"HM240318-2", ten:"Bạt thi công biển ngoài trời phủ kín mặt tiền", dvt:"m2", goi:"Quảng Cáo", dg:267000, dt:0, qt:5572557},
+
+  // Máy Lạnh
+  {stt:1, ma:"HM241226-9", ten:"Máy lạnh treo tường Midea Mono 1 chiều 2.0HP", dvt:"bộ", goi:"Máy Lạnh", dg:8850000, dt:8850000, qt:8850000},
+  {stt:2, ma:"HM241228-2", ten:"Ống đồng cách nhiệt cho ĐHKK treo tường", dvt:"md", goi:"Máy Lạnh", dg:26000, dt:390000, qt:260000},
+  {stt:3, ma:"HM241229-2", ten:"Nhân công lắp máy treo tường gắn tường", dvt:"Bộ", goi:"Máy Lạnh", dg:450000, dt:450000, qt:450000},
+  {stt:4, ma:"HM250101-7", ten:"Khung dàn nóng máy 2.0HP gắn tường ngoài", dvt:"Máy", goi:"Máy Lạnh", dg:320000, dt:320000, qt:320000},
+  {stt:5, ma:"HM241231-7", ten:"Ống thoát nước Φ27mm đầu thải ĐHKK", dvt:"md", goi:"Máy Lạnh", dg:35000, dt:175000, qt:35000},
+  {stt:6, ma:"HM250104-6", ten:"Nhân công đục tường âm dây điện ĐHKK", dvt:"md", goi:"Máy Lạnh", dg:40000, dt:280000, qt:40000},
+  {stt:7, ma:"HM240329-9", ten:"Máng gen nhựa SP 60x30mm (đi dây ĐHKK)", dvt:"Cây(2m)", goi:"Máy Lạnh", dg:105000, dt:210000, qt:105000},
+  {stt:8, ma:"HM230703-3", ten:"Nhân công thi công nhỏ lẻ phát sinh ĐHKK", dvt:"công", goi:"Máy Lạnh", dg:0, dt:290000, qt:675000},
+];
+
+// Helper functions
+function fmt(n){ if(!n && n!==0) return '-'; return Math.abs(n).toLocaleString('vi-VN'); }
+function fmtSgn(n){ if(!n) return '<span class="diff-zero">0</span>'; let v=Math.abs(n).toLocaleString('vi-VN'); return n>0?`<span class="diff-pos">+${v}</span>`:`<span class="diff-neg">-${v}</span>`; }
+function classifyItem(d){
+  if(d.dt===0 && d.qt>0) return {label:'Phát Sinh', badge:'badge-red', key:'phat-sinh'};
+  if(d.dt>0 && d.qt===0) return {label:'Bị Bớt', badge:'badge-green', key:'bot'};
+  if(d.ma && d.ma.startsWith('Temp')) return {label:'Mã Temp', badge:'badge-orange', key:'temp'};
+  if(d.dt !== d.qt) return {label:'Sai Số', badge:'badge-orange', key:'sai-so'};
+  return {label:'Khớp', badge:'badge-gray', key:'khop'};
+}
+function rowClass(d){
+  let diff = d.qt - d.dt;
+  if(d.dt===0 && d.qt>0) return 'highlight-red';
+  if(d.dt>0 && d.qt===0) return 'highlight-green';
+  if(diff !== 0) return 'highlight-orange';
+  return '';
+}
+function dsClass(key){
+  if(key==='phat-sinh') return 'highlight-red';
+  if(key==='bot') return 'highlight-green';
+  if(key==='sai-so'||key==='temp') return 'highlight-orange';
+  return '';
+}
+
+// ============================================================
+//  MULTI-PROJECT DATA (145 projects)
+// ============================================================
+(function generateProjects() {
+  const sizes = ['A','B','C','D'];
+  const nhaThau = ['Minh Ký','Tiến Phát','Nam Phú','An Thịnh','Hoàng Long','Tây Nguyên','Đông Bắc','Phú Cường',
+    'Thanh Bình','Nhật Nam','Trường Thịnh','Việt Long','Kim Phát','Đại Thành','Bảo Anh','Mỹ Gia',
+    'Phúc Lộc','Bắc Phương','Nam Hưng','Nhà TC 123'];
+  const diaDanh = ['Hà Nội','TP.HCM','Đà Nẵng','Hải Phòng','Cần Thơ','Huế','Nha Trang','Đà Lạt',
+    'Vũng Tàu','Cần Thơ','Biên Hòa','Nam Định','Thái Nguyên','Bắc Ninh','Hải Dương','Vinh','Quy Nhơn',
+    'Buôn Ma Thuột','Pleiku','Mỹ Tho','Long Xuyên','Cà Mau','Phan Thiết','Thanh Hóa','Hà Tĩnh',
+    'Quảng Ngãi','Quảng Nam','Kon Tum','Gia Lai','Đắk Lắk','Phú Thọ','Lào Cai','Sơn La','Hòa Bình'];
+  const trangThaiList = ['Quyết Toán','Nghiệm Thu','Dự Toán','Thi Công'];
+  const seedHmLech = [45,62,88,32,57,71,39,53,47,66,28,81,54,43,69,35,77,50,41,60];
+  const real = { ma:'GSXD-20250901-24', ten:'NHÀ THUỐC FPT LONG CHÂU', diaChi:'LC 443 Hoàng Văn Thụ, Phú Thọ', size:'C', nhaThau:'Minh Ký', dt:550695695, qt:562568972, hmLech:72, trangThai:'Quyết Toán' };
+  window.projects = [real];
+  let seed = 137;
+  function rnd(min,max){ seed=(seed*6364136223846793005n?seed:(seed=137)); seed=(seed*1103515245+12345)&0x7fffffff; return min + (seed % (max-min+1)); }
+  // Use a simpler deterministic generator
+  let s = 42;
+  function prng(min, max) { s = (s * 1664525 + 1013904223) >>> 0; return min + (s % (max - min + 1)); }
+  for(let i=1; i<145; i++){
+    const idx = i-1;
+    const num = String(i+24).padStart(2,'0');
+    const dd = diaDanh[prng(0, diaDanh.length-1)];
+    const sz = sizes[prng(0,3)];
+    const nt = nhaThau[prng(0, nhaThau.length-1)];
+    const baseDT = prng(350, 820) * 1e6;
+    const changePct = prng(-15, 20);
+    const qtVal = Math.round(baseDT * (1 + changePct/100));
+    const hml = prng(20, 95);
+    const ts = trangThaiList[prng(0,3)];
+    window.projects.push({ ma:'GSXD-20250901-'+num, ten:'NHÀ THUỐC FPT LONG CHÂU', diaChi:'LC '+prng(10,999)+' '+['Nguyễn Trãi','Lê Lợi','Trần Phú','Giải Phóng','CMT8','Hoàng Văn Thụ','Điện Biên Phủ','Võ Văn Kiệt','Lý Thường Kiệt','Bà Triệu'][prng(0,9)]+', '+dd, size:sz, nhaThau:nt, dt:baseDT, qt:qtVal, hmLech:hml, trangThai:ts });
+  }
+})();
+
+let currentFilterProj = 'tat-ca';
+function renderProj(filter) {
+  currentFilterProj = filter;
+  let data = projects;
+  if(filter==='vuot') data = projects.filter(p=> p.qt > p.dt);
+  else if(filter==='duoi') data = projects.filter(p=> p.qt < p.dt);
+  let html=''; let n=1;
+  data.forEach(p=> {
+    let diff = p.qt - p.dt;
+    let pct = ((diff/p.dt)*100).toFixed(1);
+    let rc = diff>0?'highlight-red': (diff<0?'highlight-green':'');
+    let diffHtml = diff>0?`<span class="diff-pos">+${Math.abs(diff).toLocaleString('vi-VN')}</span>`:
+                   diff<0?`<span class="diff-neg">-${Math.abs(diff).toLocaleString('vi-VN')}</span>`:
+                   `<span class="diff-zero">Khớp</span>`;
+    let pctHtml = diff>0?`<span class="num-red">+${pct}%</span>`:
+                  diff<0?`<span class="num-green">${pct}%</span>`:'0%';
+    let isCurrent = p.ma==='GSXD-20250901-24';
+    let stBadge = p.trangThai==='Quyết Toán'?'badge-blue': (p.trangThai==='Nghiệm Thu'?'badge-orange':'badge-gray');
+    html+=`<tr class="${rc}" style="${isCurrent?'font-weight:600':''}">
+      <td>${n++}${isCurrent?' 👈':''}</td>
+      <td><span class="badge badge-blue" style="font-size:10px">${p.ma}</span></td>
+      <td>${p.ten}<br><span style="font-size:10.5px;color:#6b7280">${p.diaChi}</span></td>
+      <td style="text-align:center"><span class="tag">${p.size}</span></td>
+      <td style="text-align:center;font-size:11px">${p.nhaThau}</td>
+      <td style="text-align:right" class="num-blue">${p.dt.toLocaleString('vi-VN')}</td>
+      <td style="text-align:right" class="num-blue">${p.qt.toLocaleString('vi-VN')}</td>
+      <td style="text-align:right">${diffHtml}</td>
+      <td style="text-align:center">${pctHtml}</td>
+      <td style="text-align:center">${diff!==0?`<span class="badge badge-orange">${p.hmLech}</span>`:`<span class="badge badge-gray">${p.hmLech}</span>`}</td>
+      <td style="text-align:center"><span class="badge ${stBadge}">${p.trangThai}</span></td>
+    </tr>`;
+  });
+  // Totals row
+  let totalDT = data.reduce((s,p)=>s+p.dt,0);
+  let totalQT = data.reduce((s,p)=>s+p.qt,0);
+  let totalDiff = totalQT - totalDT;
+  html += `<tr style="background:#f0f4ff;font-weight:700">
+    <td colspan="5">TỔNG CỘNG (${data.length} công trình)</td>
+    <td style="text-align:right;color:#1e40af">${totalDT.toLocaleString('vi-VN')}</td>
+    <td style="text-align:right;color:#1e40af">${totalQT.toLocaleString('vi-VN')}</td>
+    <td style="text-align:right">${totalDiff>0?`<span class="diff-pos">+${totalDiff.toLocaleString('vi-VN')}</span>`:`<span class="diff-neg">${totalDiff.toLocaleString('vi-VN')}</span>`}</td>
+    <td></td><td></td><td></td>
+  </tr>`;
+  document.getElementById('tbodyProj').innerHTML = html;
+}
+function filterProj(f, btn) {
+  document.querySelectorAll('#m1 .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderProj(f);
+}
+
+// ============================================================
+//  MAIN TAB SWITCHING
+// ============================================================
+function showMainTab(id) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.getElementById('btn-'+id).classList.add('active');
+  if(id==='m1') { initChartAllProj(); renderProj(currentFilterProj); }
+  if(id==='m2') { showSubTab('s_ncc'); }
+}
+
+// ============================================================
+//  SUB-TAB SWITCHING
+// ============================================================
+function showSubTab(id) {
+  document.querySelectorAll('.subpage').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.subtab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.getElementById('sbtn-'+id).classList.add('active');
+  if(id==='s_ncc') { buildNCCData(); renderNCC('all'); updateNCCKPIs(); }
+  if(id==='s_3gd') { render3GD('all'); initChart3GD(); }
+  if(id==='s_log') { renderLog('all'); initChartLog(); }
+}
+
+// ============================================================
+//  MODULE 1: KIEM TRA FILE NCC
+// ============================================================
+function buildNCCData(){
+  if(window.nccBuilt) return;
+  window.nccBuilt=true;
+  var s=55;
+  function pr(mn,mx){ s=(s*1664525+1013904223)>>>0; return mn+(s%(mx-mn+1)); }
+  var wrongUnit={'m3':'m2','m2':'m','md':'m','Cay(2m)':'cay','Cai':'chiec'};
+  window.nccItems=allItems.map(function(d,i){
+    var isT=d.ma.startsWith('Temp');
+    var dg2=d.dg,dv2=d.dvt,wP=false,wU=false;
+    if(isT) return Object.assign({},d,{dgNCC:d.dg,dvtNCC:d.dvt,hasWrongPrice:false,hasWrongUnit:false,ngoaiMD:true});
+    pr(0,9); var r1=pr(0,99),r2=pr(0,99);
+    if(r1<18&&d.dg>0){var b=pr(8,28);dg2=Math.round(d.dg*(100+b)/100);wP=(dg2!==d.dg);}
+    if(r2<9&&wrongUnit[d.dvt]){dv2=wrongUnit[d.dvt];wU=true;}
+    return Object.assign({},d,{dgNCC:dg2,dvtNCC:dv2,hasWrongPrice:wP,hasWrongUnit:wU,ngoaiMD:false});
+  });
+}
+function updateNCCKPIs(){
+  if(!window.nccItems)return;
+  var gia=window.nccItems.filter(function(d){return d.hasWrongPrice;}).length;
+  var dvt=window.nccItems.filter(function(d){return d.hasWrongUnit;}).length;
+  var ok=window.nccItems.filter(function(d){return !d.hasWrongPrice&&!d.hasWrongUnit&&!d.ngoaiMD;}).length;
+  document.getElementById('kpi-ok').textContent=ok;
+  document.getElementById('kpi-gia').textContent=gia;
+  document.getElementById('kpi-dvt').textContent=dvt;
+  var fb=document.getElementById('ncc-filter-bar');
+  if(fb){fb.querySelectorAll('.filter-btn')[1].textContent='Sai Don Gia ('+gia+')';
+    fb.querySelectorAll('.filter-btn')[2].textContent='Sai DVT ('+dvt+')';
+    fb.querySelectorAll('.filter-btn')[4].textContent='OK ('+ok+')';}
+}
+function renderNCC(filter){
+  filter=filter||'all';
+  if(!window.nccItems)buildNCCData();
+  var data=window.nccItems;
+  if(filter==='sai-gia')data=data.filter(function(d){return d.hasWrongPrice;});
+  else if(filter==='sai-dvt')data=data.filter(function(d){return d.hasWrongUnit;});
+  else if(filter==='ngoai-md')data=data.filter(function(d){return d.ngoaiMD;});
+  else if(filter==='ok')data=data.filter(function(d){return !d.hasWrongPrice&&!d.hasWrongUnit&&!d.ngoaiMD;});
+  var html='',n=1;
+  data.forEach(function(d){
+    var hasErr=d.hasWrongPrice||d.hasWrongUnit||d.ngoaiMD;
+    var rc=d.ngoaiMD?'highlight-orange':(hasErr?'highlight-red':'');
+    var kq=d.ngoaiMD?'<span class="badge badge-orange">Ngoai MD</span>':
+           hasErr?'<span class="badge badge-red">Can XL</span>':'<span class="badge badge-green">OK</span>';
+    var dg2=d.dgNCC||d.dg,dd=(dg2-(d.dg||0));
+    var pct=d.dg>0&&dd!==0?'<span class="num-red">+'+(dd/d.dg*100).toFixed(1)+'%</span>':'—';
+    var cDVT=d.hasWrongUnit?'<span class="badge badge-red">X</span>':'<span class="badge badge-green">OK</span>';
+    var cDG=d.ngoaiMD?'<span class="diff-zero">—</span>':d.hasWrongPrice?'<span class="badge badge-red">X</span>':'<span class="badge badge-green">OK</span>';
+    html+='<tr class="'+rc+'"><td>'+n+++'</td><td style="font-size:10.5px">'+d.ma+'</td><td>'+d.ten+'</td>'
+      +'<td><span class="badge badge-blue" style="font-size:10px">'+d.goi+'</span></td>'
+      +'<td style="text-align:center;font-size:11px">'+(d.hasWrongUnit?'<span class="num-red">'+d.dvtNCC+'</span>':d.dvtNCC)+'</td>'
+      +'<td style="text-align:center;font-size:11px;color:#6b7280">'+d.dvt+'</td>'
+      +'<td style="text-align:center">'+cDVT+'</td>'
+      +'<td style="text-align:right">'+(d.hasWrongPrice?'<span class="num-red">'+dg2.toLocaleString('vi-VN')+'</span>':'<span class="num-blue">'+dg2.toLocaleString('vi-VN')+'</span>')+'</td>'
+      +'<td style="text-align:right" class="num-gray">'+(d.dg?d.dg.toLocaleString('vi-VN'):'—')+'</td>'
+      +'<td style="text-align:right">'+(dd!==0?fmtSgn(dd):'<span class="diff-zero">—</span>')+'</td>'
+      +'<td style="text-align:center">'+pct+'</td>'
+      +'<td style="text-align:center">'+cDG+'</td>'
+      +'<td style="text-align:center">'+kq+'</td></tr>';
+  });
+  document.getElementById('tbodyNCC').innerHTML=html;
+}
+function filterNCC(f,btn){
+  document.querySelectorAll('#ncc-filter-bar .filter-btn').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active'); renderNCC(f);
+}
+// ============================================================
+//  MODULE 2: 3 GIAI DOAN DT / NT / QT
+// ============================================================
+function render3GD(filter){
+  filter=filter||'all';
+  var data=allItems.map(function(d,i){
+    var nt=window.ntItems?window.ntItems[i]:null;
+    var ntV=nt?Math.round((nt.slNT||0)*(nt.gia||d.dg||0)):Math.round(d.dt*0.97);
+    return Object.assign({},d,{ntVal:ntV});
+  });
+  if(filter==='phat-sinh')data=data.filter(function(d){return d.dt===0&&d.qt>0;});
+  else if(filter==='bi-bot')data=data.filter(function(d){return d.dt>0&&d.qt===0;});
+  else if(filter==='tang')data=data.filter(function(d){return d.qt>d.dt&&d.dt>0;});
+  else if(filter==='giam')data=data.filter(function(d){return d.qt<d.dt&&d.qt>0;});
+  else if(filter==='lech-dt-nt')data=data.filter(function(d){return Math.abs(d.ntVal-d.dt)>500;});
+  else if(filter==='lech-nt-qt')data=data.filter(function(d){return Math.abs(d.qt-d.ntVal)>500;});
+  var html='',n=1,lastGoi='';
+  data.forEach(function(d){
+    var l1=d.ntVal-d.dt,l2=d.qt-d.ntVal,lT=d.qt-d.dt;
+    var cl=classifyItem(d);
+    var rc=d.dt===0&&d.qt>0?'highlight-red':d.dt>0&&d.qt===0?'highlight-green':Math.abs(lT)>0?'highlight-orange':'';
+    if(d.goi!==lastGoi&&filter==='all'){lastGoi=d.goi;html+='<tr class="section-header"><td colspan="11">'+d.goi.toUpperCase()+'</td></tr>';}
+    html+='<tr class="'+rc+'"><td>'+n+++'</td><td style="font-size:10.5px">'+d.ma+'</td><td>'+d.ten+'</td>'
+      +'<td><span class="badge badge-blue" style="font-size:10px">'+d.goi+'</span></td>'
+      +'<td style="text-align:right" class="'+(d.dt?'num-blue':'num-gray')+'">'+(d.dt?fmt(d.dt):'—')+'</td>'
+      +'<td style="text-align:right" class="'+(d.ntVal?'num-blue':'num-gray')+'">'+(d.ntVal?fmt(d.ntVal):'—')+'</td>'
+      +'<td style="text-align:right">'+(Math.abs(l1)>0?fmtSgn(l1):'<span class="diff-zero">—</span>')+'</td>'
+      +'<td style="text-align:right" class="'+(d.qt?'num-blue':'num-gray')+'">'+(d.qt?fmt(d.qt):'—')+'</td>'
+      +'<td style="text-align:right">'+(Math.abs(l2)>0?fmtSgn(l2):'<span class="diff-zero">—</span>')+'</td>'
+      +'<td style="text-align:right;font-weight:700">'+(lT!==0?fmtSgn(lT):'<span class="diff-zero">Khop</span>')+'</td>'
+      +'<td style="text-align:center"><span class="badge '+cl.badge+'" style="font-size:10px">'+cl.label+'</span></td></tr>';
+  });
+  document.getElementById('tbody3GD').innerHTML=html;
+}
+function filter3GD(f,btn){
+  document.querySelectorAll('#filter3gd-bar .filter-btn').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active'); render3GD(f);
+}
+function initChart3GD(){
+  destroyChart('chart3GD');
+  var c=document.getElementById('chart3GD').getContext('2d');
+  charts['chart3GD']=new Chart(c,{type:'bar',data:{labels:['XD-ME','Noi That','QC','May Lanh'],
+    datasets:[{label:'DT',data:[168.75,209.00,161.97,10.97],backgroundColor:'#bfdbfe',borderRadius:3},
+      {label:'NT',data:[175.00,200.00,165.00,8.50],backgroundColor:'#60a5fa',borderRadius:3},
+      {label:'QT',data:[191.67,192.63,171.53,6.74],backgroundColor:'#1d4ed8',borderRadius:3}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom',labels:{font:{size:10}}}},
+      scales:{y:{beginAtZero:true,ticks:{callback:function(v){return v+'tr';},font:{size:10}}},x:{ticks:{font:{size:10}}}}}});
+  destroyChart('chartLech3GD');
+  var c2=document.getElementById('chartLech3GD').getContext('2d');
+  charts['chartLech3GD']=new Chart(c2,{type:'bar',data:{labels:['XD-ME','Noi That','QC','May Lanh'],
+    datasets:[{label:'Phat Sinh',data:[14.1,0,15.8,0.68],backgroundColor:'#ef4444',borderRadius:3,stack:'s'},
+      {label:'Tang SL',data:[36.2,0,6.3,0],backgroundColor:'#fb923c',borderRadius:3,stack:'s'},
+      {label:'Giam SL',data:[-27.4,-16.4,-12.6,-4.23],backgroundColor:'#86efac',borderRadius:3,stack:'s'}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom',labels:{font:{size:10}}}},
+      scales:{y:{ticks:{callback:function(v){return v+'tr';},font:{size:10}}},x:{ticks:{font:{size:10}}}}}});
+}
+// ============================================================
+//  VERSION LOG DATA
+// ============================================================
+var logVersions=[
+  {ver:'V1.0',ngay:'01/10/2025',tongHM:118,tongGT:520000000,delta:0,hmMoi:0,hmBo:0,hmSua:0,moTa:'Du toan ban dau sau khao sat thiet ke',bdg:'#93c5fd'},
+  {ver:'V1.1',ngay:'20/10/2025',tongHM:121,tongGT:536500000,delta:16500000,hmMoi:3,hmBo:0,hmSua:9,moTa:'Bo sung 3 HM phat sinh sau do dac thuc dia lan 2, dieu chinh 9 don gia',bdg:'#60a5fa'},
+  {ver:'V2.0',ngay:'10/11/2025',tongHM:126,tongGT:550695695,delta:14195695,hmMoi:5,hmBo:0,hmSua:14,moTa:'Dieu chinh cuoi truoc khoi cong: them motor cua cuon, op kinh, cap nuoc',bdg:'#3b82f6'},
+  {ver:'QT',ngay:'22/12/2025',tongHM:126,tongGT:562568972,delta:11873277,hmMoi:0,hmBo:0,hmSua:21,moTa:'Quyet toan sau thi cong — 21 HM dieu chinh gia tri',bdg:'#1e40af'}
+];
+function renderVersionCards(){
+  var html='';
+  logVersions.forEach(function(v,i){
+    var isCur=i===logVersions.length-1;
+    var dH=i===0?'<span class="diff-zero">Phien ban goc</span>':
+      v.delta>0?'<span class="diff-pos">+'+(v.delta/1e6).toFixed(1)+'tr vs V'+i+'</span>':
+      '<span class="diff-neg">'+(v.delta/1e6).toFixed(1)+'tr vs V'+i+'</span>';
+    html+='<div class="card" style="border-top:4px solid '+v.bdg+'">'
+      +'<div class="card-body" style="padding:14px;">'
+      +'<div style="display:flex;justify-content:space-between;margin-bottom:6px;">'
+      +'<span style="font-size:13px;font-weight:800;color:'+v.bdg+'">'+v.ver+'</span>'
+      +(isCur?'<span class="badge badge-blue">Hien tai</span>':'')+'</div>'
+      +'<div style="font-size:10.5px;color:#6b7280;margin-bottom:4px">'+v.ngay+' · '+v.tongHM+' HM</div>'
+      +'<div style="font-size:15px;font-weight:800;color:#1e40af;margin-bottom:4px">'+(v.tongGT/1e6).toFixed(1)+' tr</div>'
+      +'<div style="font-size:11px;margin-bottom:6px">'+dH+'</div>'
+      +'<div style="font-size:10.5px;color:#374151;line-height:1.4">'+v.moTa+'</div>'
+      +'<div style="display:flex;gap:6px;margin-top:8px;font-size:10.5px;flex-wrap:wrap;">'
+      +(v.hmMoi>0?'<span style="background:#fee2e2;color:#dc2626;padding:1px 7px;border-radius:10px;font-weight:700">+'+v.hmMoi+' HM moi</span>':'')
+      +(v.hmBo>0?'<span style="background:#dcfce7;color:#16a34a;padding:1px 7px;border-radius:10px;font-weight:700">-'+v.hmBo+' bop</span>':'')
+      +(v.hmSua>0?'<span style="background:#ffedd5;color:#ea580c;padding:1px 7px;border-radius:10px;font-weight:700">'+v.hmSua+' sua</span>':'')
+      +'</div></div></div>';
+  });
+  document.getElementById('logVersionCards').innerHTML=html;
+}
+// ============================================================
+//  SUB1 - PHASE 1: DỰ TOÁN TABLE (kiểm tra mã)
+// ============================================================
+function renderDT(filter='all'){
+  let data = allItems;
+  if(filter==='chuan') data = allItems.filter(d=> !d.ma.startsWith('Temp'));
+  else if(filter==='temp') data = allItems.filter(d=> d.ma.startsWith('Temp'));
+  let html=''; let n=1;
+  data.forEach(d=>{
+    let isTemp = d.ma.startsWith('Temp');
+    let rc = isTemp ? 'highlight-orange' : (d.dt===0 ? 'highlight-red' : '');
+    let statusBadge = isTemp
+      ? '<span class="badge badge-orange">⚠️ Mã Temp</span>'
+      : '<span class="badge badge-green">✅ Chuẩn MD</span>';
+    html+=`<tr class="${rc}">
+      <td>${n++}</td>
+      <td style="font-size:11px;font-weight:${isTemp?700:400}">${d.ma}</td>
+      <td>${d.ten}</td>
+      <td style="text-align:center;font-size:11px">${d.dvt}</td>
+      <td><span class="badge badge-blue" style="font-size:10px">${d.goi}</span></td>
+      <td style="text-align:right;font-size:11px" class="num-gray">${d.dg?d.dg.toLocaleString('vi-VN'):'-'}</td>
+      <td style="text-align:right" class="${d.dt?'num-blue':'num-gray'}">${d.dt?d.dt.toLocaleString('vi-VN'):'<em style="color:#9ca3af">0 — Phát sinh QT</em>'}</td>
+      <td style="text-align:center">${statusBadge}</td>
+    </tr>`;
+  });
+  document.getElementById('tbodyDT').innerHTML = html;
+}
+function filterDT(f, btn){
+  document.querySelectorAll('#s1 .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderDT(f);
+}
+
+// ============================================================
+//  SUB2 - PHASE 2: TABLE
+// ============================================================
+let allLechData = allItems.filter(d=> d.dt !== d.qt || (d.ma && d.ma.startsWith('Temp')));
+function renderLech(filter='tat-ca'){
+  let data = allLechData;
+  if(filter==='phat-sinh') data = allItems.filter(d=>d.dt===0 && d.qt>0);
+  else if(filter==='bot') data = allItems.filter(d=>d.dt>0 && d.qt===0);
+  else if(filter==='sai-so') data = allItems.filter(d=>d.dt!==d.qt && d.dt>0 && d.qt>0);
+  else if(filter==='temp') data = allItems.filter(d=>d.ma && d.ma.startsWith('Temp'));
+  let html=''; let n=1;
+  data.forEach(d=>{
+    let diff=d.qt-d.dt; let cl=classifyItem(d); let rc=dsClass(cl.key);
+    let pct = d.dt>0? ((diff/d.dt)*100).toFixed(1)+'%' : (d.qt>0?'PS':'0%');
+    html+=`<tr class="${rc}">
+      <td>${n++}</td>
+      <td>${d.ma}</td>
+      <td>${d.ten}</td>
+      <td><span class="badge badge-blue">${d.goi}</span></td>
+      <td style="text-align:right" class="num-${d.dt?'blue':'gray'}">${fmt(d.dt)}</td>
+      <td style="text-align:right" class="num-${d.qt?'blue':'gray'}">${fmt(d.qt)}</td>
+      <td style="text-align:right">${fmtSgn(diff)}</td>
+      <td style="text-align:center">${d.dt?pct:'—'}</td>
+      <td style="text-align:center"><span class="badge ${cl.badge}">${cl.label}</span></td>
+    </tr>`;
+  });
+  document.getElementById('tbodyLech').innerHTML = html;
+}
+function filterLech(f, btn){
+  document.querySelectorAll('#lech-filter-bar .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderLech(f);
+}
+
+// ============================================================
+//  PAGE 3 - TABLE
+// ============================================================
+function renderDS(filter='all'){
+  let data = allItems;
+  if(filter==='phat-sinh') data=allItems.filter(d=>d.dt===0&&d.qt>0);
+  else if(filter==='tang') data=allItems.filter(d=>d.qt>d.dt&&d.dt>0);
+  else if(filter==='giam') data=allItems.filter(d=>d.qt<d.dt&&d.qt>0);
+  else if(filter==='bot') data=allItems.filter(d=>d.dt>0&&d.qt===0);
+  else if(filter==='khop') data=allItems.filter(d=>d.dt===d.qt&&d.dt>0);
+  let html=''; let n=1;
+  data.forEach(d=>{
+    let diff=d.qt-d.dt; let cl=classifyItem(d); let rc=dsClass(cl.key);
+    html+=`<tr class="${rc}">
+      <td>${n++}</td>
+      <td>${d.ma}</td>
+      <td>${d.ten}</td>
+      <td><span class="badge badge-blue">${d.goi}</span></td>
+      <td style="text-align:right" class="${d.dt?'num-blue':'num-gray'}">${fmt(d.dt)}</td>
+      <td style="text-align:right" class="${d.qt?'num-blue':'num-gray'}">${fmt(d.qt)}</td>
+      <td style="text-align:right">${fmtSgn(diff)}</td>
+      <td style="text-align:center"><span class="badge ${cl.badge}">${cl.label}</span></td>
+    </tr>`;
+  });
+  document.getElementById('tbodyDS').innerHTML = html;
+}
+function filterDS(f, btn){
+  document.querySelectorAll('#s2b .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderDS(f);
+}
+
+// ============================================================
+//  PAGE 4 - TABLE
+// ============================================================
+function renderFull(filter='all'){
+  let data = allItems;
+  if(filter==='xdme') data=allItems.filter(d=>d.goi==='XD-ME');
+  else if(filter==='nt') data=allItems.filter(d=>d.goi==='Nội Thất');
+  else if(filter==='qc') data=allItems.filter(d=>d.goi==='Quảng Cáo');
+  else if(filter==='ml') data=allItems.filter(d=>d.goi==='Máy Lạnh');
+  else if(filter==='lech') data=allItems.filter(d=>d.dt!==d.qt);
+  let html=''; let n=1; let lastGoi='';
+  data.forEach(d=>{
+    let diff=d.qt-d.dt; let cl=classifyItem(d); let rc=rowClass(d);
+    if(d.goi!==lastGoi && filter==='all'){
+      lastGoi=d.goi;
+      let totDT=allItems.filter(x=>x.goi===d.goi&&!isNaN(x.dt)).reduce((s,x)=>s+x.dt,0);
+      let totQT=allItems.filter(x=>x.goi===d.goi&&!isNaN(x.qt)).reduce((s,x)=>s+x.qt,0);
+      html+=`<tr class="section-header">
+        <td colspan="6">📦 ${d.goi.toUpperCase()}</td>
+        <td style="text-align:right">DT: ${totDT.toLocaleString('vi-VN')}</td>
+        <td style="text-align:right">QT: ${totQT.toLocaleString('vi-VN')}</td>
+        <td style="text-align:right">${fmtSgn(totQT-totDT)}</td>
+        <td></td>
+      </tr>`;
+    }
+    html+=`<tr class="${rc}">
+      <td>${n++}</td>
+      <td style="font-size:11px">${d.ma}</td>
+      <td>${d.ten}</td>
+      <td style="text-align:center;font-size:11px">${d.dvt}</td>
+      <td><span class="badge badge-blue" style="font-size:10px">${d.goi}</span></td>
+      <td style="text-align:right;font-size:11px" class="num-gray">${d.dg?d.dg.toLocaleString('vi-VN'):'-'}</td>
+      <td style="text-align:right" class="${d.dt?'num-blue':'num-gray'}">${fmt(d.dt)}</td>
+      <td style="text-align:right" class="${d.qt?'num-blue':'num-gray'}">${fmt(d.qt)}</td>
+      <td style="text-align:right">${diff!==0?fmtSgn(diff):'<span class="diff-zero">Khớp</span>'}</td>
+      <td style="text-align:center"><span class="badge ${cl.badge}" style="font-size:10px">${cl.label}</span></td>
+    </tr>`;
+  });
+  document.getElementById('tbodyFull').innerHTML = html;
+}
+function filterFull(f, btn){
+  document.querySelectorAll('#full-filter-bar .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderFull(f);
+}
+
+// ============================================================
+//  CHARTS
+// ============================================================
+let charts = {};
+function destroyChart(id){ if(charts[id]){ charts[id].destroy(); delete charts[id]; } }
+
+// ============================================================
+//  CHART: ALL PROJECTS
+// ============================================================
+function initChartAllProj(){
+  // Chart 1: So cong trinh co sai lech theo 4 giai doan
+  destroyChart('chartAllProj');
+  var ctx = document.getElementById('chartAllProj').getContext('2d');
+  charts['chartAllProj'] = new Chart(ctx, {
+    type:'bar',
+    data:{ labels:['Du Toan','Dang Thi Cong','Nghiem Thu','Quyet Toan'],
+      datasets:[{
+        label:'So CT co sai lech',
+        data:[23, 67, 41, 89],
+        backgroundColor:['#93c5fd','#fb923c','#60a5fa','#ef4444'],
+        borderRadius:6
+      }]
+    },
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ display:false },
+        tooltip:{ callbacks:{ label:function(c){ return c.parsed.y+' cong trinh'; } } }
+      },
+      scales:{
+        y:{ beginAtZero:true, ticks:{ stepSize:20, font:{size:10} } },
+        x:{ ticks:{ font:{size:11} } }
+      }
+    }
+  });
+
+  // Chart 2: CSS Heatmap - hang muc sai theo goi x loai loi
+  var goiLabels = ['XD & ME','Noi That','QC','May Lanh'];
+  var loaiLabels = ['Sai Don Gia','Sai DVT','Phat Sinh','Bi Bot'];
+  var heatData = [[18,4,8,5],[3,1,2,1],[8,2,5,3],[4,0,2,1]];
+  var maxVal = 18;
+  function cellBg(v){
+    var r=v/maxVal;
+    if(r===0) return '#f1f5f9';
+    if(r<0.15) return '#fef9c3';
+    if(r<0.35) return '#fed7aa';
+    if(r<0.55) return '#fb923c';
+    if(r<0.75) return '#ef4444';
+    return '#b91c1c';
+  }
+  var h='<table style="width:100%;border-collapse:separate;border-spacing:5px;font-size:11.5px;">';
+  h+='<tr><td style="width:90px"></td>';
+  loaiLabels.forEach(function(l){h+='<th style="text-align:center;color:#374151;font-weight:700;font-size:10.5px;padding:3px 4px">'+l+'</th>';});
+  h+='</tr>';
+  heatData.forEach(function(row,i){
+    h+='<tr><td style="font-weight:700;font-size:11px;color:#374151;padding:3px 8px 3px 0;white-space:nowrap">'+goiLabels[i]+'</td>';
+    row.forEach(function(v){
+      var bg=cellBg(v); var tc=v>=8?'#fff':'#1e293b';
+      h+='<td style="text-align:center;background:'+bg+';color:'+tc+';font-weight:'+(v>0?'800':'400')+';font-size:16px;padding:16px 4px;border-radius:8px">'+(v>0?v:'\u2014')+'</td>';
+    });
+    h+='</tr>';
+  });
+  h+='</table>';
+  h+='<div style="display:flex;align-items:center;gap:4px;margin-top:10px;font-size:10px;color:#6b7280"><span>Thap</span>';
+  ['#f1f5f9','#fef9c3','#fed7aa','#fb923c','#ef4444','#b91c1c'].forEach(function(c){
+    h+='<div style="width:20px;height:11px;background:'+c+';border-radius:2px;border:1px solid #e2e8f0"></div>';
+  });
+  h+='<span>Cao</span></div>';
+  document.getElementById('heatmapHM').innerHTML=h;
+}
+function initChartsP2(){
+  renderLech('tat-ca');
+  destroyChart('chartHMlech');
+  const ctx = document.getElementById('chartHMlech').getContext('2d');
+  charts['chartHMlech'] = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['XD-ME','Nội Thất','Quảng Cáo','Máy Lạnh'],
+      datasets: [
+        { label: 'Dự Toán (tr ₫)', data: [168.75, 209.00, 161.97, 10.97], backgroundColor: '#93c5fd', borderRadius:4 },
+        { label: 'Quyết Toán (tr ₫)', data: [191.67, 192.63, 171.53, 6.74], backgroundColor: '#1d4ed8', borderRadius:4 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { font: { size: 10 } } } },
+      scales: {
+        x: { ticks: { font: { size: 10 } } },
+        y: { beginAtZero: true, ticks: { callback: v=>v+'tr', font: { size: 10 } } }
+      }
+    }
+  });
+
+  destroyChart('chartPhanLoai');
+  const ctx2 = document.getElementById('chartPhanLoai').getContext('2d');
+  charts['chartPhanLoai'] = new Chart(ctx2, {
+    type: 'doughnut',
+    data: {
+      labels: ['Phát Sinh (15)','Bị Bớt (5)','Sai Số Lượng (50)','Mã Temp (2)'],
+      datasets: [{
+        data: [15, 5, 50, 2],
+        backgroundColor: ['#ef4444','#22c55e','#f97316','#3b82f6']
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { font: { size: 10 }, boxWidth: 12 } } }
+    }
+  });
+}
+
+function initChartsP3(){ /* legacy - kept for compatibility */ }
+
+// ============================================================
+//  PHASE 3: NGHIỆM THU DATA + TABLE
+// ============================================================
+// Generate NT data from allItems — simulate acceptance quantities
+(function buildNTData(){
+  let s2=99;
+  function pr(min,max){ s2=(s2*1664525+1013904223)>>>0; return min+(s2%(max-min+1)); }
+  window.ntItems = allItems.map(d=>{
+    // 5 HM not yet accepted (DT=0 phát sinh, or random)
+    if(d.dt===0 && d.qt>0){ return {...d, slDT:0, slNT:0, ntStatus:'Phát Sinh - Chưa NT', gia:d.dg||0}; }
+    if(d.dt>0 && d.qt===0){ return {...d, slDT: Math.round(d.dt/(d.dg||1)), slNT:0, ntStatus:'Bỏ Bớt - Không NT', gia:d.dg||0}; }
+    const slDT = d.dg>0 ? Math.round(d.dt/d.dg) : 1;
+    const r = pr(0,9);
+    // 70% khớp, 20% ít hơn, 10% chưa
+    let slNT = slDT, ntStatus='✅ Khớp';
+    if(r>=8){ slNT=0; ntStatus='❌ Chưa NT'; }
+    else if(r>=7){ slNT=Math.max(1,Math.round(slDT*0.8)); ntStatus='⚠️ NT Thiếu'; }
+    else if(r===5){ slNT=Math.round(slDT*1.1); ntStatus='⬆️ NT Vượt'; }
+    return {...d, slDT, slNT, ntStatus, gia:d.dg||0};
+  });
+})();
+
+function renderNT(filter='all'){
+  let data = window.ntItems;
+  if(filter==='lech') data = data.filter(d=>d.slDT!==d.slNT);
+  else if(filter==='khop') data = data.filter(d=>d.slDT===d.slNT && d.slDT>0);
+  else if(filter==='chua') data = data.filter(d=>d.slNT===0);
+  let html=''; let n=1;
+  data.forEach(d=>{
+    let diff=d.slNT-d.slDT;
+    let valDiff = diff * d.gia;
+    let rc = d.slNT===0?'highlight-red': (diff<0?'highlight-orange': (diff>0?'highlight-red':''));
+    html+=`<tr class="${rc}">
+      <td>${n++}</td>
+      <td style="font-size:11px">${d.ma}</td>
+      <td>${d.ten}</td>
+      <td style="text-align:center;font-size:11px">${d.dvt}</td>
+      <td><span class="badge badge-blue" style="font-size:10px">${d.goi}</span></td>
+      <td style="text-align:right" class="num-blue">${d.slDT}</td>
+      <td style="text-align:right" class="${d.slNT===0?'num-gray':'num-blue'}">${d.slNT}</td>
+      <td style="text-align:right">${diff!==0?fmtSgn(diff):'<span class="diff-zero">Khớp</span>'}</td>
+      <td style="text-align:right">${valDiff!==0?fmtSgn(valDiff):'<span class="diff-zero">0</span>'}</td>
+      <td style="text-align:center"><span class="badge ${d.ntStatus.includes('Khớp')?'badge-green': (d.ntStatus.includes('Chưa')||d.ntStatus.includes('Bỏ')?'badge-red':'badge-orange')}" style="font-size:10px">${d.ntStatus}</span></td>
+    </tr>`;
+  });
+  document.getElementById('tbodyNT').innerHTML = html;
+}
+function filterNT(f, btn){
+  document.querySelectorAll('#s_nt .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderNT(f);
+}
+
+// ============================================================
+//  PHASE 4: LỊCH SỬ ĐIỀU CHỈNH
+// ============================================================
+const adjustmentLog = [
+  { id:1, ngay:'12/11/2025', ma:'HM200203-8', ten:'Cấu kiện cột BTCT chữ nhật đổ tại chỗ', goi:'XD-ME', loai:'giam', truoc:14550030, sau:11438100, lydo:'Giảm khối lượng cột sau đo đạc thực tế' },
+  { id:2, ngay:'18/11/2025', ma:'HM200225-8', ten:'Xây tường 200mm', goi:'XD-ME', loai:'tang', truoc:715644, sau:1423872, lydo:'Phát sinh tường do thay đổi thiết kế mặt bằng' },
+  { id:3, ngay:'25/11/2025', ma:'HM200203-5', ten:'Cấu kiện cột VUÔNG thép hộp', goi:'XD-ME', loai:'tang', truoc:456000, sau:1964400, lydo:'Tăng số lượng cột vuông theo bản vẽ điều chỉnh' },
+  { id:4, ngay:'01/12/2025', ma:'HM221120-5', ten:'Hệ quầy kính trưng bày kèo nghiêng', goi:'Nội Thất', loai:'giam', truoc:31008000, sau:22803800, lydo:'Giảm 1 quầy so với thiết kế ban đầu' },
+  { id:5, ngay:'08/12/2025', ma:'HM200205-3', ten:'Ốp kính thủy tinh cường lực', goi:'XD-ME', loai:'tang', truoc:1977800, sau:9666360, lydo:'Phát sinh ốp kính thêm cột mặt ngoài' },
+  { id:6, ngay:'15/12/2025', ma:'Temp250910-02', ten:'Lắp đặt cần đèn phát sinh (mã ngoài MD)', goi:'Quảng Cáo', loai:'phat-sinh', truoc:0, sau:2100000, lydo:'Phát sinh thêm cần đèn chiếu biển theo yêu cầu BM' },
+  { id:7, ngay:'22/12/2025', ma:'HM170523-9', ten:'Thuê máy cẩu xe tải gắn cẩu thi công biển', goi:'Quảng Cáo', loai:'phat-sinh', truoc:0, sau:7000000, lydo:'Cần cẩu để lắp biển lớn tầng 2, không có trong DT' },
+  { id:8, ngay:'28/12/2025', ma:'HM241231-7', ten:'Ống thoát nước ĐHKK', goi:'Máy Lạnh', loai:'giam', truoc:175000, sau:35000, lydo:'Giảm chiều dài ống thoát theo thực tế lắp đặt' },
+  { id:9, ngay:'05/01/2026', ma:'HM231001-3', ten:'Bộ bu lông móc treo biển', goi:'Quảng Cáo', loai:'giam', truoc:1500000, sau:750000, lydo:'Giảm 1 bộ bu lông sau khi đo thực tế' },
+  { id:10, ngay:'10/01/2026', ma:'HM200103-9', ten:'Motor cửa cuốn tự động 1 pha', goi:'XD-ME', loai:'phat-sinh', truoc:0, sau:4561000, lydo:'Cửa cuốn ban đầu DT không có motor, nhà thuốc yêu cầu bổ sung' },
+];
+
+function renderLog(filter='all'){
+  let data = adjustmentLog;
+  if(filter==='tang') data = data.filter(d=>d.loai==='tang');
+  else if(filter==='giam') data = data.filter(d=>d.loai==='giam');
+  else if(filter==='phat-sinh') data = data.filter(d=>d.loai==='phat-sinh');
+  else if(filter==='bo-bot') data = data.filter(d=>d.loai==='bo-bot');
+  let html=''; let n=1;
+  data.forEach(d=>{
+    let diff = d.sau - d.truoc;
+    let loaiBadge = d.loai==='tang'?'<span class="badge badge-red">📈 Tăng Giá Trị</span>':
+                    d.loai==='giam'?'<span class="badge badge-green">📉 Giảm Giá Trị</span>':
+                    d.loai==='phat-sinh'?'<span class="badge badge-orange">🆕 Phát Sinh</span>':
+                    '<span class="badge badge-gray">❌ Bỏ Bớt</span>';
+    let rc = d.loai==='tang'||d.loai==='phat-sinh'?'highlight-red':'highlight-green';
+    html+=`<tr class="${rc}">
+      <td>${n++}</td>
+      <td>${d.ngay}</td>
+      <td style="font-size:11px">${d.ma}</td>
+      <td>${d.ten}</td>
+      <td><span class="badge badge-blue" style="font-size:10px">${d.goi}</span></td>
+      <td style="text-align:center">${loaiBadge}</td>
+      <td style="text-align:right" class="${d.truoc?'num-blue':'num-gray'}">${d.truoc?d.truoc.toLocaleString('vi-VN'):'—'}</td>
+      <td style="text-align:right" class="${d.sau?'num-blue':'num-gray'}">${d.sau?d.sau.toLocaleString('vi-VN'):'—'}</td>
+      <td style="text-align:right">${fmtSgn(diff)}</td>
+      <td style="font-size:11px;color:#6b7280">${d.lydo}</td>
+    </tr>`;
+  });
+  document.getElementById('tbodyLog').innerHTML = html;
+}
+function filterLog(f, btn){
+  document.querySelectorAll('#log-filter-bar .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderLog(f);
+}
+
+function initChartLog(){
+  destroyChart('chartLogTrend');
+  const labels = adjustmentLog.map(d=>d.ngay);
+  let cumulative = 0;
+  const cumData = adjustmentLog.map(d=>{ cumulative += (d.sau - d.truoc); return +(cumulative/1e6).toFixed(2); });
+  const changes = adjustmentLog.map(d=>+((d.sau-d.truoc)/1e6).toFixed(2));
+  const ctx = document.getElementById('chartLogTrend').getContext('2d');
+  charts['chartLogTrend'] = new Chart(ctx, {
+    type:'bar',
+    data:{
+      labels,
+      datasets:[
+        { type:'bar', label:'Thay Đổi (tr ₫)', data:changes, backgroundColor:changes.map(v=>v>0?'#fca5a5':'#86efac'), borderRadius:4, yAxisID:'y' },
+        { type:'line', label:'Lũy Kế (tr ₫)', data:cumData, borderColor:'#1d4ed8', backgroundColor:'rgba(29,78,216,0.12)', tension:0.4, pointRadius:4, fill:true, yAxisID:'y' }
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom',labels:{font:{size:10}}}},
+      scales:{
+        y:{ticks:{callback:v=>v+'tr',font:{size:10}}},
+        x:{ticks:{font:{size:9},maxRotation:45}}
+      }
+    }
+  });
+}
+
+function renderTimeline(){
+  let html='';
+  adjustmentLog.forEach(d=>{
+    let diff=d.sau-d.truoc;
+    let color=diff>0?'#dc2626':'#16a34a';
+    let icon=diff>0?'📈':'📉';
+    if(d.loai==='phat-sinh'){color='#ea580c';icon='🆕';}
+    html+=`<div style="display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid #f1f5f9;">
+      <div style="min-width:70px;font-size:10.5px;color:#6b7280;padding-top:2px;">${d.ngay}</div>
+      <div style="width:20px;height:20px;border-radius:50%;background:${color};display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;margin-top:1px;">${icon}</div>
+      <div>
+        <div style="font-size:11.5px;font-weight:600">${d.ten}</div>
+        <div style="font-size:10.5px;color:#6b7280">${d.goi} · ${d.lydo}</div>
+        <div style="font-size:11px;font-weight:700;color:${color};margin-top:2px;">${diff>0?'+':''}${(diff/1e6).toFixed(2)} tr ₫</div>
+      </div>
+    </div>`;
+  });
+  document.getElementById('timelineLog').innerHTML = html;
+}
+
+// ============================================================
+//  INIT
+// ============================================================
+window.addEventListener('DOMContentLoaded', () => {
+  // Start on Tab 1: Tổng Quan Công Trình
+  initChartAllProj();
+  renderProj('tat-ca');
+});
+</script>
+</body>
+</html>
